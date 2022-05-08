@@ -212,7 +212,7 @@ else:
 		pass
 
 
-repetitions = 10
+repetitions = 20
 parameters = [3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 20, 25]
 collisions = []
 reachability = []
@@ -252,7 +252,10 @@ for p, nrNodes in enumerate(parameters):
 			collisionRate[rep] = float((nrCollisions)/nrSensed)
 		else:
 			collisionRate[rep] = np.NaN
-		nodeReach[rep] = sum([n.usefulPackets for n in nodes])/(messageSeq*(conf.NR_NODES-1))*100
+		if messageSeq != 0: 
+			nodeReach[rep] = sum([n.usefulPackets for n in nodes])/(messageSeq*(conf.NR_NODES-1))*100
+		else: 
+			nodeReach[rep] = np.NaN
 		if nrReceived != 0:
 			nodeUsefulness[rep] = sum([n.usefulPackets for n in nodes])/nrReceived*100  # nr of packets that delivered to a message to a new receiver out of all packets received
 		else: 
