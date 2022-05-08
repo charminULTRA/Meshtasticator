@@ -85,7 +85,7 @@ class MeshNode():
 				self.packets.append(p)
 				self.env.process(self.transmit(p))
 				while True: # ReliableRouter: retransmit message if no ACK received after timeout 
-					retransmissionMsec = getRetransmissionMsec() 
+					retransmissionMsec = getRetransmissionMsec(p) 
 					yield self.env.timeout(retransmissionMsec)
 
 					ackReceived = False  # check whether you received an ACK on the transmitted message
