@@ -2,6 +2,7 @@
 import simpy
 import numpy as np
 from matplotlib import pyplot as plt
+import matplotlib
 matplotlib.use("TkAgg")
 import lib.config as conf
 from lib.common import *
@@ -86,7 +87,7 @@ class MeshNode():
 				self.packets.append(p)
 				self.env.process(self.transmit(p))
 				while True: # ReliableRouter: retransmit message if no ACK received after timeout 
-					retransmissionMsec = getRetransmissionMsec() 
+					retransmissionMsec = getRetransmissionMsec(p) 
 					yield self.env.timeout(retransmissionMsec)
 
 					ackReceived = False  # check whether you received an ACK on the transmitted message
@@ -263,7 +264,7 @@ for p, nrNodes in enumerate(parameters):
 			"Reachability": nodeReach, 
 			"Usefulness": nodeUsefulness,
 		}
-		subdir = "hopLim"+str(conf.hopLimit)
+		subdir = "CW"
 		simReport(data, subdir, nrNodes)
 	print('Collision rate average:', round(np.nanmean(collisionRate), 2))
 	print('Reachability average:', round(np.nanmean(nodeReach), 2))
