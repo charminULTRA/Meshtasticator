@@ -65,7 +65,7 @@ class MeshNode():
 				tries += 1
 				if tries > 1000:
 					print('Could not find a location to place the node. Try increasing RAY or decreasing MINDIST.')
-					exit(1)
+					break
 
 		env.process(self.generateMessage())
 		env.process(self.receive(self.bc_pipe.get_output_conn()))

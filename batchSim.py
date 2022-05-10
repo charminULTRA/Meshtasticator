@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 import simpy
 import numpy as np
-from matplotlib import pyplot as plt
 import matplotlib
+from matplotlib import pyplot as plt
 matplotlib.use("TkAgg")
 import lib.config as conf
 from lib.common import *
@@ -67,7 +67,7 @@ class MeshNode():
 				tries += 1
 				if tries > 1000:
 					print('Could not find a location to place the node. Try increasing RAY or decreasing MINDIST.')
-					exit(1)
+					break
 
 		env.process(self.generateMessage())
 		env.process(self.receive(self.bc_pipe.get_output_conn()))
@@ -235,7 +235,7 @@ for p, nrNodes in enumerate(parameters):
 	collisionRate = [0 for _ in range(repetitions)]
 	meanDelay = [0 for _ in range(repetitions)]
 	meanTxAirUtilization = [0 for _ in range(repetitions)]
-	print("\nStart of", p, "out of", len(parameters)-1, "value", nrNodes)
+	print("\nStart of", p+1, "out of", len(parameters), "value", nrNodes)
 	for rep in range(repetitions):
 		setBatch(rep)
 		random.seed(rep)
@@ -249,10 +249,17 @@ for p, nrNodes in enumerate(parameters):
 		packetsAtN = [[] for _ in range(conf.NR_NODES)]
 		messageSeq = 0
 
-		for nodeId in range(conf.NR_NODES):
-			if len(conf.xs) == 0: 
-				node = MeshNode(nodes, env, bc_pipe, nodeId, conf.PERIOD, messages, packetsAtN, packets, delays)
-			nodes.append(node)
+		found = False
+		while not found:
+			nodes = []
+			for nodeId in range(conf.NR_NODES):
+				if len(conf.xs) == 0: 
+					node = MeshNode(nodes, env, bc_pipe, nodeId, conf.PERIOD, messages, packetsAtN, packets, delays)
+					if node.x == -1:
+						break
+				nodes.append(node)
+			if len(nodes) == conf.NR_NODES:
+				found = True
 
 		# start simulation
 		env.run(until=conf.SIMTIME)
