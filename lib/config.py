@@ -1,15 +1,15 @@
 import numpy as np
 
-MODEM = 0
+MODEM = 3
 MODEL = 5
 NR_NODES = 10
 INTERFERENCE_LEVEL = 0.05
 COLLISION_DUE_TO_INTERFERENCE = False
-RAY = 1000  # m 
+RAY = 4000  # m 
 MINDIST = 5  # m
-SIMTIME = 200000  # ms
+SIMTIME = 200000*(MODEM+1)  # ms
 PERIOD = 100000*(MODEM+1)  # mean period of generating a new message with exponential distribution in ms
-PACKETLENGTH = 20  # payload in bytes 
+PACKETLENGTH = 100/(MODEM+1)  # payload in bytes  
 NOISE_LEVEL = -119.25  # some noise level in dB, based on SNR_MIN and minimum receiver sensitivity
 OX = 0.0  # origin x-coordinate
 OY = 0.0  # origin y-coordinate
