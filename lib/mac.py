@@ -58,8 +58,9 @@ def getTxDelayMsec(packet):  # from RadioInterface::getTxDelayMsec
 
 def getRetransmissionMsec(packet):  # from RadioInterface::getRetransmissionMsec
     CWsize = 5-packet.retransmissions
+    CWmax = 7
     packetAirtime = int(airtime(conf.SFMODEM[conf.MODEM], conf.CRMODEM[conf.MODEM], packet.packetlen, conf.BWMODEM[conf.MODEM]))
-    return 2*packetAirtime + (2**CWsize-1) * min_Tx_wait_msec + (4*7-1) * min_Tx_wait_msec
+    return 2*packetAirtime + (2**CWsize-1) * min_Tx_wait_msec + (4*CWmax-1) * min_Tx_wait_msec
 
 
 if VERBOSE:
