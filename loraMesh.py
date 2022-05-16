@@ -213,6 +213,9 @@ else:
 	def verboseprint(*args, **kwargs): 
 		pass
 
+getParams(sys.argv)	
+env = simpy.Environment()
+bc_pipe = BroadcastPipe(env)
 
 # simulation variables
 nodes = []
@@ -221,10 +224,6 @@ packets = []
 delays = []
 packetsAtN = [[] for _ in range(conf.NR_NODES)]
 messageSeq = 0
-
-getParams(sys.argv)	
-env = simpy.Environment()
-bc_pipe = BroadcastPipe(env)
 
 graph = Graph()
 for i in range(conf.NR_NODES):
