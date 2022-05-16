@@ -33,7 +33,7 @@ def getTxDelayMsecWeighted(node, rssi):  # from RadioInterface::getTxDelayMsecWe
         # else:
         #    CW = random.randint(0, 4*CWsize-5)
     else:
-        CW = random.randint(0, 4*CWsize-1)
+        CW = random.randint(0, 2**CWsize-1)
         # CW = random.randint(4*CWsize-4, 4*CWsize-1)
 
     # if node.isRouter == True:
