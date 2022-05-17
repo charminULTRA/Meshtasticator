@@ -31,20 +31,10 @@ def getTxDelayMsecWeighted(node, rssi):  # from RadioInterface::getTxDelayMsecWe
         # if CWsize == 1:
         CW = random.randint(0, 2*CWsize-1)
         # else:
-        #    CW = random.randint(0, 4*CWsize-5)
+        #   CW = random.randint(0, 4*CWsize-5)
     else:
         CW = random.randint(0, 2**CWsize-1)
         # CW = random.randint(4*CWsize-4, 4*CWsize-1)
-
-    # if node.isRouter == True:
-    #     CWmin = 1
-    #     CWmax = 7
-    # else:
-    #     CWmin = 2
-    #     CWmax = 8
-
-    # CWsize = int((snr - SNR_MIN) * (CWmax - CWmin) / (SNR_MAX - SNR_MIN) + CWmin)
-    # CW = random.randint(0, 2**CWsize-1)
     verboseprint('Node', node.nodeid, 'has CW size', CWsize, 'and picked CW', CW)
     return CW * min_Tx_wait_msec
 
