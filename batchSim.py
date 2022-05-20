@@ -305,7 +305,7 @@ for p, nrNodes in enumerate(parameters):
 			"PACKETLENGTH": conf.PACKETLENGTH,  
 			"nrMessages": messageSeq
 		}
-		subdir = "CW2"
+		subdir = "CW4"
 		simReport(data, subdir, nrNodes)
 	print('Collision rate average:', round(np.nanmean(collisionRate), 2))
 	print('Reachability average:', round(np.nanmean(nodeReach), 2))

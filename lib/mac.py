@@ -24,8 +24,8 @@ def getTxDelayMsecWeighted(node, rssi):  # from RadioInterface::getTxDelayMsecWe
         verboseprint('Maximum SNR at RSSI of', rssi, 'dBm')  
         snr = SNR_MAX
 
-    CWmin = 1
-    CWmax = 7
+    CWmin = 2
+    CWmax = 8
     CWsize = int((snr - SNR_MIN) * (CWmax - CWmin) / (SNR_MAX - SNR_MIN) + CWmin)
     if node.isRouter == True:
         # if CWsize == 1:
