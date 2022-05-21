@@ -1,9 +1,10 @@
-from .phy import airtime, min_Tx_wait_msec
+from .phy import airtime, slotTime
 from . import config as conf
 import random
 
 VERBOSE = False
-
+CWmin = 2
+CWmax = 8
 
 def setTransmitDelay(node, packet):  # from RadioLibInterface::setTransmitDelay
     for p in reversed(node.packetsAtN[node.nodeid]):
@@ -24,33 +25,26 @@ def getTxDelayMsecWeighted(node, rssi):  # from RadioInterface::getTxDelayMsecWe
         verboseprint('Maximum SNR at RSSI of', rssi, 'dBm')  
         snr = SNR_MAX
 
-    CWmin = 2
-    CWmax = 8
     CWsize = int((snr - SNR_MIN) * (CWmax - CWmin) / (SNR_MAX - SNR_MIN) + CWmin)
     if node.isRouter == True:
-        # if CWsize == 1:
         CW = random.randint(0, 2*CWsize-1)
-        # else:
-        #   CW = random.randint(0, 4*CWsize-5)
     else:
         CW = random.randint(0, 2**CWsize-1)
-        # CW = random.randint(4*CWsize-4, 4*CWsize-1)
     verboseprint('Node', node.nodeid, 'has CW size', CWsize, 'and picked CW', CW)
-    return CW * min_Tx_wait_msec
+    return CW * slotTime
 
 
 def getTxDelayMsec(packet):  # from RadioInterface::getTxDelayMsec
-    CWsize = 5-packet.retransmissions
+    CWsize = conf.maxRetransmission+CWmin-packet.retransmissions
     CW = random.randint(0, 2**CWsize-1)
     verboseprint('Picked CW', CW)
-    return CW * min_Tx_wait_msec
+    return CW * slotTime
 
 
 def getRetransmissionMsec(packet):  # from RadioInterface::getRetransmissionMsec
-    CWsize = 5-packet.retransmissions
-    CWmax = 7
+    CWsize = conf.maxRetransmission+CWmin-packet.retransmissions
     packetAirtime = int(airtime(conf.SFMODEM[conf.MODEM], conf.CRMODEM[conf.MODEM], packet.packetlen, conf.BWMODEM[conf.MODEM]))
-    return 2*packetAirtime + (2**CWsize-1) * min_Tx_wait_msec + (4*CWmax-1) * min_Tx_wait_msec
+    return 2*packetAirtime + (2**CWsize-1) * slotTime + (2**CWmax-1) * slotTime
 
 
 if VERBOSE:
